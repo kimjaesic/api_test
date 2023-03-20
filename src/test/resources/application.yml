@@ -1,0 +1,26 @@
+spring:
+  datasource: #DB관련 설정
+    url: jdbc:h2:tcp://localhost/~/hello
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties.hibernate:
+      show_sql: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  output:
+    ansi:
+      enabled: always #TODO: 터미널 로그를 컬러풀하게 보여주는 옵션인데 현재 적용이 안됨.. 해결 필요
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE #Java객체 <-> JSON 변환시 사용할 전략설정
+
+
+

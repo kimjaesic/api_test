@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title> api test</title>
+</head>
+
+<body>
+    <input type="text" id="query" name="query">
+    <input type='radio'
+           name='gender'
+           value='accuracy'
+           checked/>정확도순
+    <input type='radio'
+           name='gender'
+           value='recency'/>최신순
+    <button id="btn" name="btn" onclick="doAction()">click</button>
+
+    <div id="authors"></div>
+    <div id="hide_text" style = "display:none">test kimjaesic</div>
+
+</body>
+<script>
+
+    function doAction()
+    {
+        const ul = document.getElementById('authors');
+        const hide_text = document.getElementById('hide_text');
+        const query = document.getElementById('query');
+
+        hide_text.innerText = query.value;
+
+        fetch("http://localhost:33004/backend/kakao/search", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        body: JSON.stringify({
+                query: document.getElementById("query").value,
+                sort: document.getElementsByName('gender').value,
+                page: "1",
+                size: "10",
+            }),
+        })
+        .then(function(response){
+            return response.json()})
+        .then((data) => {
+            var movies = '';
+            var hide = '';
+            var pageTotal = data.page_data.total_search / 10;
+            var pageTotalCount = data.page_data.total_search % 10;
+
+            if(pageTotalCount > 0)
+            {
+                pageTotal += 1;
+            }
+
+            if(pageTotal > 50)
+            {
+                pageTotal = 50;
+            }
+            for (var i = 0; i < pageTotal; i++) {
+                movies += '<a harf="#" id = "' + (i+1) + '" onclick="doActionPage(this.id)">[' + (i+1) + ']</a>'
+            }
+
+            movies += '<p>' +  ' 페이지 번호 ->'+ data.page_data.page_num + ' 총 데이터수 ->'+  data.page_data.total_search + '</p>';
+            data.ranking_data.forEach((result) =>
+            {
+                movies += '<p>' + result.search_string + ' 검색횟수 ->'+ result.search_counting + ' 검색랭킹 ->'+  result.search_ranking + '</p>';
+            });
+            data.documents.forEach((result) =>
+            {
+                movies += '<p> 블로그제목 : ' + result.title + '</p>'+'<p> 블로그글 요약 : ' + result.contents + '</p>'+'<p> 블로그글 URL' + result.url + '</p>'+'<p> 블로그이름' + result.blogname + '</p>'+'<p>  대표이미지 : <img src="' + result.thumbnail +'"width="100" height="200"></p>'+'<p> 블로그글 작성시간' + result.datetime + '</p>';
+                movies += '<p></p>'
+            });
+
+            ul.innerHTML = movies;
+
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+
+    function doActionPage(id)
+    {
+        const ul = document.getElementById('authors');
+        const hide_text = document.getElementById('hide_text');
+        const query = document.getElementById('query');
+        query.value = hide_text.innerText;
+
+        fetch("http://localhost:33004/backend/kakao/paging", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        body: JSON.stringify({
+                query: hide.innerText,
+                sort: document.getElementsByName('gender').value,
+                page: id,
+                size: "10",
+            }),
+        })
+        .then(function(response){
+            return response.json()})
+        .then((data) => {
+            var movies = '';
+
+            var pageTotal = data.page_data.total_search / 10;
+            var pageTotalCount = data.page_data.total_search % 10;
+            if(pageTotalCount > 0)
+            {
+                pageTotal += 1;
+            }
+            if(pageTotal > 50)
+            {
+                pageTotal = 50;
+            }
+
+            for (var i = 0; i < pageTotal; i++) {
+                movies += '<a harf="#" id = "' + (i+1) + '" onclick="doActionPage(this.id)">[' + (i+1) + ']</a>'
+            }
+
+            movies += '<p>' +  ' 페이지 번호 ->'+ data.page_data.page_num + ' 총 데이터수 ->'+  data.page_data.total_search + '</p>';
+            data.ranking_data.forEach((result) =>
+            {
+                movies += '<p>' + result.search_string + ' 검색횟수 ->'+ result.search_counting + ' 검색랭킹 ->'+  result.search_ranking + '</p>';
+            });
+            data.documents.forEach((result) =>
+            {
+                movies += '<p> 블로그제목 : ' + result.title + '</p>'+'<p> 블로그글 요약 : ' + result.contents + '</p>'+'<p> 블로그글 URL' + result.url + '</p>'+'<p> 블로그이름' + result.blogname + '</p>'+'<p>  대표이미지 : <img src="' + result.thumbnail +'"width="100" height="200"></p>'+'<p> 블로그글 작성시간' + result.datetime + '</p>';
+                movies += '<p></p>'
+            });
+
+            ul.innerHTML = movies;
+
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+  </script>
+
+</html>
