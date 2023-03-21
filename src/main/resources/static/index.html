@@ -11,14 +11,17 @@
     <input type='radio'
            name='gender'
            value='accuracy'
+           onclick='getGender(event)'
            checked/>정확도순
     <input type='radio'
            name='gender'
+           onclick='getGender(event)'
            value='recency'/>최신순
     <button id="btn" name="btn" onclick="doAction()">click</button>
 
     <div id="authors"></div>
     <div id="hide_text" style = "display:none">test kimjaesic</div>
+    <div id="gender_text" style = "display:none">accuracy</div>
 
 </body>
 <script>
@@ -28,7 +31,6 @@
         const ul = document.getElementById('authors');
         const hide_text = document.getElementById('hide_text');
         const query = document.getElementById('query');
-
         hide_text.innerText = query.value;
 
         fetch("http://localhost:33004/backend/kakao/search", {
@@ -38,7 +40,7 @@
             },
         body: JSON.stringify({
                 query: document.getElementById("query").value,
-                sort: document.getElementsByName('gender').value,
+                sort: document.getElementById("gender_text").innerText,
                 page: "1",
                 size: "10",
             }),
@@ -90,14 +92,16 @@
         const query = document.getElementById('query');
         query.value = hide_text.innerText;
 
+
+
         fetch("http://localhost:33004/backend/kakao/paging", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
         body: JSON.stringify({
-                query: hide.innerText,
-                sort: document.getElementsByName('gender').value,
+                query: hide_text.innerText,
+                sort: document.getElementById("gender_text").innerText,
                 page: id,
                 size: "10",
             }),
@@ -140,6 +144,11 @@
             console.log(error);
         });
     }
+
+    function getGender(event) {
+    document.getElementById('gender_text').innerText = event.target.value;
+    }
+
   </script>
 
 </html>

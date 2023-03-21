@@ -1,79 +1,80 @@
 buildscript {
-    ext {
-        queryDslVersion = "5.0.0"
-    }
+	ext {
+		queryDslVersion = "5.0.0"
+	}
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.6.2'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
-    id 'java'
+	id 'org.springframework.boot' version '2.6.2'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+	id 'java'
 }
 
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor // lombok 관련
-    }
+	compileOnly {
+		extendsFrom annotationProcessor // lombok 관련
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // lombok, Mapstruct 함께 쓸 경우 순서 중요
-    // lombok
-    annotationProcessor 'org.projectlombok:lombok'
-    implementation 'org.projectlombok:lombok:1.18.18'
-    compileOnly 'org.projectlombok:lombok'
+	// lombok, Mapstruct 함께 쓸 경우 순서 중요
+	// lombok
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.projectlombok:lombok:1.18.18'
+	compileOnly 'org.projectlombok:lombok'
 
-    // Mapstruct
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-    testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
-    implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
+	// Mapstruct
+	implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
+	testAnnotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
+	implementation group: 'org.projectlombok', name: 'lombok-mapstruct-binding', version: '0.2.0'
 
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    // Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-test'
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.security:spring-security-test'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 
-    // https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
-    implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.6.1'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+	implementation group: 'org.springframework.security', name: 'spring-security-web', version: '5.6.1'
 
-    // Swagger (API문서작성 및 테스트를 자동화 및 웹페이지로 확인할 수 있게 해준다)
-    implementation 'io.springfox:springfox-swagger2:2.9.2'
-    implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	// Swagger (API문서작성 및 테스트를 자동화 및 웹페이지로 확인할 수 있게 해준다)
+	implementation 'io.springfox:springfox-swagger2:2.9.2'
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
 
-    // JPA관련 의존성
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	// JPA관련 의존성
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // JPA에서 쿼리 파라미터 확인을 도와주는 라이브러리
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+	// JPA에서 쿼리 파라미터 확인을 도와주는 라이브러리
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
 
-    // H2 Database (테스트용 으로 사용할 DB)
-    implementation group: 'com.h2database', name: 'h2', version: '1.4.199'
+	// H2 Database (테스트용 으로 사용할 DB)
+	implementation group: 'com.h2database', name: 'h2', version: '1.4.199'
 
-    // QueryDSL (JPQL 빌더 역할을 하는 라이브러리로서 JPQL작성을 좀더 객체지향적으로 할 수 있게 해준다)
-    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
-    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+	// QueryDSL (JPQL 빌더 역할을 하는 라이브러리로서 JPQL작성을 좀더 객체지향적으로 할 수 있게 해준다)
+	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-    // assertJ (다양한 문법 및 메서드 체이닝 지원을 통해 테스트케이스 작성을 도와주는 라이브러리)
-    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
+	// assertJ (다양한 문법 및 메서드 체이닝 지원을 통해 테스트케이스 작성을 도와주는 라이브러리)
+	testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
 
-    // 소프트웨어 결함 탐지를 위한 라이브러리
-    implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
+	// 소프트웨어 결함 탐지를 위한 라이브러리
+	implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
 }
 
@@ -81,22 +82,22 @@ dependencies {
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
-    jpa = true
-    querydslSourcesDir = querydslDir
+	jpa = true
+	querydslSourcesDir = querydslDir
 }
 sourceSets {
-    main.java.srcDir querydslDir
+	main.java.srcDir querydslDir
 }
 compileQuerydsl{
-    options.annotationProcessorPath = configurations.querydsl
+	options.annotationProcessorPath = configurations.querydsl
 }
 configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-    querydsl.extendsFrom compileClasspath
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
