@@ -65,6 +65,7 @@ public class kakaoService {
         }
         catch (Exception e)
         {
+            System.out.println(e);
             String sort = (query.getSort().equals("accuracy"))? "sim" : "date";
             URI targetUrlnaver = UriComponentsBuilder
                     .fromUriString(naverUrl) //기본 url
@@ -82,7 +83,15 @@ public class kakaoService {
             httpHeader.set("X-Naver-Client-Secret",naverSecret); //Authorization 설정
             httpHeader.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity naver_entity = new HttpEntity<>(httpHeader); // http entity에 header 담아줌
-            ResponseEntity<naverDocumentData> responseEntits = restnaver.exchange(targetUrlnaver, HttpMethod.GET, naver_entity, naverDocumentData.class);
+            ResponseEntity<naverDocumentData> responseEntits = null;
+            try
+            {
+                responseEntits = restnaver.exchange(targetUrlnaver, HttpMethod.GET, naver_entity, naverDocumentData.class);
+            }
+            catch (Exception ex)
+            {
+                System.out.println(ex);
+            }
 
             List<naverDocumentData.SearchLocalItem> documents = responseEntits.getBody().getItems();
 
